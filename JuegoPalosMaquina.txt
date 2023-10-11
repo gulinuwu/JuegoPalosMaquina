@@ -1,3 +1,5 @@
+//JuegoPalos contra la máquina
+//El juego es exactamente igual al anterior pero el propio programa jugara contra ti y deberás intentar ganarle.
 public void JuegoPalosMaquina()
 {
     //Inicio del juego y breve explicación 
@@ -23,7 +25,7 @@ public void JuegoPalosMaquina()
         Console.WriteLine("Ronda número " + ronda);
         if (turno % 2 == 1)
         {
-            Console.WriteLine("Turno número " + turno + " tu turno.");
+            Console.WriteLine("Turno número " + turno + " ,tu turno.");
             //Comprobación del momento en el que solo quedan 2 palos, si solo quedan dos palos el máximo numero de palos que podemos restar es 1.
             if (npalos == 2)
             {
@@ -39,19 +41,39 @@ public void JuegoPalosMaquina()
             if (npalos > 2)
             {
                 npalos = ComprobarNormal(npalos);
+                
                 if (npalos == 0)
                 {
                     Console.WriteLine("Has perdido, te has quedado con 0 palos");
                 }
+                
             }
             turno++;
         }
 
-
         if (turno % 2 == 0)
         {
-            Console.WriteLine("Turno número " + turno + " turno de la máquina.");
-            if (npalos == 2)
+            Console.WriteLine("Turno número " + turno + ", turno de la máquina.");
+            if (npalos > 2)
+            {
+                aleatorio = random.Next(1, 4); //Almacenamos en la variable aleatorio un valor entre 1 y 3 de generado aleatoriamente.
+                Thread.Sleep(1000);
+                npalos = npalos - aleatorio;
+                if (npalos == 0)
+                {
+                    //Hay posibilidad de que la máquina quite mas palos de los necesarios para ganar y eso haría que tu ganes.
+                    Console.WriteLine("La máquina es tontina y se ha quedao sin palos, tú ganas.");
+                }
+                else
+                {
+                    Thread.Sleep(1000);
+                    Console.WriteLine($"La máquina ha borrado {aleatorio} palos.");
+                    Console.WriteLine();
+                    imprimir(npalos);
+                    Console.WriteLine();
+                }
+            }
+            else if (npalos == 2)
             {
                 aleatorio = 1; //Almacenamos en la variable aleatorio el valor de 1 cuando solo quedan dos palos para que automáticamente gane.
                 npalos = npalos - aleatorio;
@@ -67,25 +89,6 @@ public void JuegoPalosMaquina()
                 Console.WriteLine($"La máquina te ha dejado con un palo. La máquina gana.");
                 Console.WriteLine();
                 break;
-            }
-            if (npalos > 2)
-            {
-                aleatorio = random.Next(1, 4); //Almacenamos en la variable aleatorio un valor entre 1 y 3 de generado aleatoriamente.
-                Thread.Sleep(1000);
-                npalos = npalos - aleatorio;
-                if (npalos == 0)
-                {
-                    //Hay posibilidad de que la máquina quite mas palos de los necesarios para ganar y eso haría que tu ganes.
-                    Console.WriteLine("La máquina es tontina y se ha quedao sin palos, tú ganas."); 
-                }
-                else
-                {
-                    Thread.Sleep(1000);
-                    Console.WriteLine($"La máquina ha borrado {aleatorio} palos.");
-                    Console.WriteLine();
-                    imprimir(npalos);
-                    Console.WriteLine();
-                }
             }
             turno++;
         }
@@ -169,6 +172,7 @@ public void JuegoPalosMaquina()
             catch (Exception e)
             {
                 Console.WriteLine($"{e.Message}");
+                resta = 0; //Esta línea es muy importante para que mas adelante no nos salte el try catch debido a que resta ya tiene valor previo.
             }
         }
         while (resta < 1 || resta > 3);
