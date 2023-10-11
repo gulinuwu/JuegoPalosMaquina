@@ -1,0 +1,183 @@
+public void JuegoPalosMaquina()
+{
+    //Inicio del juego y breve explicación 
+    Console.WriteLine("JUEGO RESTA DE PALOS");
+    Console.WriteLine("--------------------");
+    Console.WriteLine("Consiste en hacer restas de palos entre 1 y 3. Pierde quien se queda con el último palo.");
+    Console.WriteLine();
+
+    Random random = new Random(); //Creación del objeto random para utilizarlo mas adelante con los turnos de la máquina.
+
+    //Declaración de las variables a utilizar más adelante y las iniciamos en 0.
+    int npalos = 1;
+    int resta = 0;
+    int ronda = 1;
+    int turno = 1;
+    int aleatorio = 0;
+
+    npalos = ComprobarNinicial(); //Almacena el numero de palos elegidos y los imprime.
+
+    //Bucle que se ejecutará mientras que el número de palos sea mayor de 1, si es 1 se termina el programa.
+    while (npalos >= 1)
+    {
+        Console.WriteLine("Ronda número " + ronda);
+        if (turno % 2 == 1)
+        {
+            Console.WriteLine("Turno número " + turno + " tu turno.");
+            //Comprobación del momento en el que solo quedan 2 palos, si solo quedan dos palos el máximo numero de palos que podemos restar es 1.
+            if (npalos == 2)
+            {
+                npalos = ComprobarN2(npalos);
+            }
+            //Comprobación de si has ganado o no.
+            if (npalos == 1)
+            {
+                ComprobarGanador(npalos);
+                break;
+            }
+            //Comprobación de que el numero de palos que queda es mayor de 2.
+            if (npalos > 2)
+            {
+                npalos = ComprobarNormal(npalos);
+                if (npalos == 0)
+                {
+                    Console.WriteLine("Has perdido, te has quedado con 0 palos");
+                }
+            }
+            turno++;
+        }
+
+
+        if (turno % 2 == 0)
+        {
+            Console.WriteLine("Turno número " + turno + " turno de la máquina.");
+            if (npalos == 2)
+            {
+                aleatorio = 1; //Almacenamos en la variable aleatorio el valor de 1 cuando solo quedan dos palos para que automáticamente gane.
+                npalos = npalos - aleatorio;
+                Thread.Sleep(1000); //Esta línea indica que el programa esperará 1000 milisegundos (1 segundo) en ejecutar la siguiente línea.
+                Console.WriteLine($"La máquina ha borrado {aleatorio} palos.");
+                Console.WriteLine();
+                imprimir(npalos);
+                Console.WriteLine();
+            }
+            if (npalos == 1)
+            {
+                Thread.Sleep(1000);
+                Console.WriteLine($"La máquina te ha dejado con un palo. La máquina gana.");
+                Console.WriteLine();
+                break;
+            }
+            if (npalos > 2)
+            {
+                aleatorio = random.Next(1, 4); //Almacenamos en la variable aleatorio un valor entre 1 y 3 de generado aleatoriamente.
+                Thread.Sleep(1000);
+                npalos = npalos - aleatorio;
+                if (npalos == 0)
+                {
+                    //Hay posibilidad de que la máquina quite mas palos de los necesarios para ganar y eso haría que tu ganes.
+                    Console.WriteLine("La máquina es tontina y se ha quedao sin palos, tú ganas."); 
+                }
+                else
+                {
+                    Thread.Sleep(1000);
+                    Console.WriteLine($"La máquina ha borrado {aleatorio} palos.");
+                    Console.WriteLine();
+                    imprimir(npalos);
+                    Console.WriteLine();
+                }
+            }
+            turno++;
+        }
+        ronda++;
+    }
+    //Función encargada de imprimir los palos con el número de palos correspondientes en cada ciclo del bucle más adelante.
+    void imprimir(int npalos)
+    {
+        for (int i = 0; i < npalos; i++)
+        {
+            Console.Write("| ");
+        }
+        Console.WriteLine();
+    }
+
+    //Función encargada de comprobar si el número de palos que queda es solo uno, entonces dice que la partida ha terminado.
+    void ComprobarGanador(int npalos)
+    {
+        if (npalos == 1)
+        {
+            Console.WriteLine("Has dejado a la máquina con 1 palo, por lo tanto has ganado.");
+        }
+    }
+
+    //Función para comprobar que el número de palos inicial introducido es válido para empezar a jugar.
+    int ComprobarNinicial()
+    {
+        do
+        {
+            Console.Write("Ingresa el número de palos inciales para el juego (8-30): ");
+            try //Comprobación de que se introduce un tipo Entero.
+            {
+                npalos = Convert.ToInt32(Console.ReadLine()); //npalos es la variable donde se almacenará el valor entero introducido por el usuario
+            }
+            catch (Exception e)
+            {
+                Console.WriteLine($"{e.Message}");
+            }
+        }
+        while (npalos < 8 || npalos > 30);
+        Console.Write("Estos son los palos que has elegido para jugar: " + npalos);
+        Console.WriteLine();
+        imprimir(npalos); //Llamada a la función para que en este instante del codigo se imprima la cantidad de palos almacenada en npalos.
+        return npalos;
+    }
+
+    //Función que comprueba que el número que se introduce para restar al 2 solo puede ser 1.
+    int ComprobarN2(int npalos)
+    {
+        do
+        {
+            Console.Write("Ingresa el número de palos a restar (Sólo válido el 1): ");
+            try //Comprobación de que se introduce un tipo Entero.
+            {
+                resta = Convert.ToInt32(Console.ReadLine()); //variable que almacena el número de palos que se van a restar al número de palos actual.
+            }
+            catch (Exception e)
+            {
+                Console.WriteLine($"{e.Message}");
+            }
+        }
+        while (resta != 1);
+        Console.WriteLine("Has elegido restar " + resta + " palo.");
+        Console.WriteLine();
+        npalos = npalos - resta; //Restamos el número de palos que tenemos actualmente y le restamos el número que nos ha introducido como resta para restar.
+        imprimir(npalos); //Mostramos el número de palos actual.
+        Console.WriteLine();
+        return npalos;
+    }
+
+    //Función que comprueba que el número para restar sin excepciones es un valor entre 1 y 3.
+    int ComprobarNormal(int npalos)
+    {
+        do
+        {
+            Console.Write("Ingresa el número de palos a restar (Sólo válido del 1 al 3): ");
+            try //Comprobación de que se introduce un tipo Entero.
+            {
+                resta = Convert.ToInt32(Console.ReadLine()); //De nuevo, variable que almacena el número de palos que se restarán.
+            }
+            catch (Exception e)
+            {
+                Console.WriteLine($"{e.Message}");
+            }
+        }
+        while (resta < 1 || resta > 3);
+
+        Console.WriteLine("Has elegido restar " + resta + " palos.");
+        Console.WriteLine();
+        npalos = npalos - resta;
+        imprimir(npalos); //Muestra por pantalla los palos activos.
+        Console.WriteLine();
+        return npalos;
+    }
+}
