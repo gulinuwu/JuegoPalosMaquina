@@ -16,6 +16,7 @@ public void JuegoPalosMaquina()
     int ronda = 1;
     int turno = 1;
     int aleatorio = 0;
+    char respuesta = 'a';
 
     npalos = ComprobarNinicial(); //Almacena el numero de palos elegidos y los imprime.
 
@@ -31,12 +32,7 @@ public void JuegoPalosMaquina()
             {
                 npalos = ComprobarN2(npalos);
             }
-            //Comprobación de si has ganado o no.
-            if (npalos == 1)
-            {
-                ComprobarGanador(npalos);
-                break;
-            }
+            
             //Comprobación de que el numero de palos que queda es mayor de 2.
             if (npalos > 2)
             {
@@ -46,7 +42,28 @@ public void JuegoPalosMaquina()
                 {
                     Console.WriteLine("Has perdido, te has quedado con 0 palos");
                 }
-                
+            }
+
+            //Comprobación de si has ganado o no.
+            if (npalos == 1)
+            {
+                ComprobarGanador(npalos);
+                //Bucle para comprobar una respuesta válida para volver a jugar o parar el programa.
+                do
+                {
+                    try
+                    {
+                        Console.WriteLine("¿Quieres volver a intentarlo? (S/N)");
+                        respuesta = Convert.ToChar(Console.ReadLine());
+                        respuesta = char.ToUpper(respuesta);
+                    }
+                    catch (Exception e)
+                    {
+                        Console.WriteLine(e.Message);
+                    }
+                } while (respuesta != 'S' && respuesta != 'N');
+                if (respuesta == 'S') { JuegoPalosMaquina(); }
+                if (respuesta == 'N') {  break; }
             }
             turno++;
         }
@@ -88,6 +105,23 @@ public void JuegoPalosMaquina()
                 Thread.Sleep(1000);
                 Console.WriteLine($"La máquina te ha dejado con un palo. La máquina gana.");
                 Console.WriteLine();
+
+                //Bucle para comprobar una respuesta válida para volver a jugar o parar el programa.
+                do
+                {
+                    try
+                    {
+                        Console.WriteLine("¿Quieres volver a intentarlo? (S/N)");
+                        respuesta = Convert.ToChar(Console.ReadLine());
+                        respuesta = char.ToUpper(respuesta);
+                    }
+                    catch (Exception e)
+                    {
+                        Console.WriteLine(e.Message);
+                    }
+                } while (respuesta != 'S' && respuesta != 'N');
+                if (respuesta == 'S') { JuegoPalosMaquina(); }
+                if (respuesta == 'N') { break; }
                 break;
             }
             turno++;
