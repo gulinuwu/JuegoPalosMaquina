@@ -64,6 +64,7 @@ public void JuegoPalosMaquina()
                 } while (respuesta != 'S' && respuesta != 'N');
                 if (respuesta == 'S') { JuegoPalosMaquina(); }
                 if (respuesta == 'N') {  break; }
+                break;
             }
             turno++;
         }
